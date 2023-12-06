@@ -59,11 +59,10 @@ bool RTIMULSM9DS1::IMUInit()
 
     // work outmag address
 
-    m_magSlaveAddr = LSM9DS1_MAG_ADDRESS1;
+    m_magSlaveAddr = LSM9DS1_MAG_ADDRESS2;
 
     if (m_settings->HALRead(m_magSlaveAddr, LSM9DS1_MAG_WHO_AM_I, 1, &result, "")) {
         if (result != LSM9DS1_MAG_ID) {
-            HAL_ERROR1("Incorrect LSM9DS1 accel/mag id %d\n", m_magSlaveAddr);
             return false;
         }
     }
