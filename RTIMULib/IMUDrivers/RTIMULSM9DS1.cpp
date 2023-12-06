@@ -59,30 +59,15 @@ bool RTIMULSM9DS1::IMUInit()
 
     // work outmag address
 
-    m_magSlaveAddr = 0;
+    m_magSlaveAddr = LSM9DS1_MAG_ADDRESS1;
 
-    if (m_settings->HALRead(LSM9DS1_MAG_ADDRESS0, LSM9DS1_MAG_WHO_AM_I, 1, &result, "")) {
-        if (result == LSM9DS1_MAG_ID) {
-            m_magSlaveAddr = LSM9DS1_MAG_ADDRESS0;
-        }
-    } else if (m_settings->HALRead(LSM9DS1_MAG_ADDRESS1, LSM9DS1_MAG_WHO_AM_I, 1, &result, "")) {
-        if (result == LSM9DS1_MAG_ID) {
-            m_magSlaveAddr = LSM9DS1_MAG_ADDRESS1;
-        }
-    } else if (m_settings->HALRead(LSM9DS1_MAG_ADDRESS2, LSM9DS1_MAG_WHO_AM_I, 1, &result, "")) {
-        if (result == LSM9DS1_MAG_ID) {
-            m_magSlaveAddr = LSM9DS1_MAG_ADDRESS2;
-        }
-    } else if (m_settings->HALRead(LSM9DS1_MAG_ADDRESS3, LSM9DS1_MAG_WHO_AM_I, 1, &result, "")) {
-        if (result == LSM9DS1_MAG_ID) {
-            m_magSlaveAddr = LSM9DS1_MAG_ADDRESS3;
+    if (m_settings->HALRead(LSM9DS1_MAG_ADDRESS1, LSM9DS1_MAG_WHO_AM_I, 1, &result, "")) {
+        if (result != LSM9DS1_MAG_ID) {
+            HAL_ERROR1("Incorrect LSM9DS1 accel/mag id %d\n", m_magSlaveAddr);
+            return false;
         }
     }
 
-    if (m_magSlaveAddr == 0){
-        HAL_ERROR1("Incorrect LSM9DS1 accel/mag id %d\n", m_magSlaveAddr);
-        return false;
-    }
 
     setCalibrationData();
 
